@@ -14,7 +14,18 @@
   </header>
 
   <main id="app">
-    <!-- search section, profile card, repo list will go here in later commits -->
+    <section class="search-section">
+    <input
+      type="text"
+      id="username-input"
+      placeholder="Enter a GitHub username..."
+      autocomplete="off"
+    >
+    <button id="search-btn">Search</button>
+  </section>
+
+  <p id="error-message" class="error hide"></p>
+
   </main>
 
   <script src="app.js"></script>
