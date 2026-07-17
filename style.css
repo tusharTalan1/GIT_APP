@@ -5,7 +5,7 @@
 }
 
 body {
-  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-family: "Segoe UI", system-ui, sans-serif;
   background-color: #f6f8fa;
   color: #24292f;
   line-height: 1.5;
@@ -128,4 +128,68 @@ body {
 .location {
   font-size: 0.85rem;
   color: #57606a;
+}
+/* Repo controls */
+.repo-controls {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.8rem;
+  font-size: 0.9rem;
+}
+
+#sort-select {
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid #d0d7de;
+}
+
+/* Repo list */
+.repo-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.repo-card {
+  background: #ffffff;
+  border: 1px solid #d0d7de;
+  border-radius: 8px;
+  padding: 1rem;
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+
+.repo-card:hover {
+  border-color: #0969da;
+}
+
+.repo-card h3 {
+  font-size: 1.05rem;
+  color: #0969da;
+  margin-bottom: 0.3rem;
+}
+
+.repo-card p {
+  font-size: 0.9rem;
+  color: #57606a;
+  margin-bottom: 0.5rem;
+}
+
+.repo-meta {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.85rem;
+  color: #57606a;
+}
+
+.load-more {
+  display: block;
+  margin: 1.2rem auto 0;
+  padding: 0.6rem 1.2rem;
+  background: #ffffff;
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  cursor: pointer;
 }
