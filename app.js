@@ -29,3 +29,26 @@ const modalLicense = document.getElementById("modal-license");
 let allRepos = [];
 let currentPage = 1;
 let currentUsername = "";
+
+function saveToCache(key, data) {
+  localStorage.setItem(key, JSON.stringify({ data, timestamp: Date.now() }));
+}
+
+function getFromCache(key, maxAgeMs) {
+  const raw = localStorage.getItem(key);
+  if (!raw) return null;
+  const entry = JSON.parse(raw);
+  if (Date.now() - entry.timestamp > maxAgeMs) return null;
+  return entry.data;
+}
+
+const CACHE_TIME = 10 * 60 * 1000; 
+
+
+function debounce(fn, delay) {
+  let timeoutId;
+  return function (...args) {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => fn(...args), delay);
+  };
+}
