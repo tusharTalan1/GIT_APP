@@ -177,3 +177,80 @@ function renderRepoList() {
   loadMoreBtn.classList.toggle("hide", visible.length >= sorted.length);
   repoControls.classList.remove("hide");
 }
+
+// ---- Modal ----
+async function openRepoModal(repo) {
+  modal.classList.remove("hide");
+  modalRepoName.textContent = repo.name;
+  modalRepoDescription.textContent = repo.description || "No description";
+  modalLanguages.innerHTML = "";
+  modalOpenIssues.textContent = "";
+  modalLicense.textContent = "";
+
+  try {
+    const { languages } = await fetchRepoDetails(repo.owner.login, repo.name);
+    Object.keys(languages).forEach(lang => {
+      const span = document.createElement("span");
+      span.textContent = lang;
+      modalLanguages.appendChild(span);
+    });
+    modalOpenIssues.textContent = `🐛 ${repo.open_issues_count} open issues`;
+    modalLicense.textContent = repo.license ? `📄 ${repo.license.name}` : "";
+  } catch (err) {
+    modalLanguages.textContent = "Could not load languages";
+  }
+}
+
+modalClose.addEventListener("click", () => modal.classList.add("hide"));
+modal.addEventListener("click", (e) => {
+  if (e.target === modal) modal.classList.add("hide"); // click outside content closes it
+});
+
+async function searchUser(username) {
+  if (!username.trim()) return;
+
+  hideError();
+  loadingMessage.classList.remove("hide");
+  profileCard.classList.add("hide");
+  repoControls.classList.add("hide");
+  repoList.innerHTML = "";
+  loadMoreBtn.classList.add("hide");
+
+  try {
+    const { user, repos } = await fetchUserData(username.trim());
+    currentUsername = username.trim();
+    allRepos = repos;
+    currentPage = 1;
+
+    renderProfile(user);
+    renderRepoList();
+  } catch (err) {
+    if (err.type === "NOT_FOUND") {
+      showError(`"${username}" doesn't exist on GitHub. Check the spelling.`);
+    } else if (err.type === "RATE_LIMIT") {
+      showError("Rate limit exceeded — try again in a few minutes.");
+    } else {
+      showError("Something went wrong. Check your connection and try again.");
+    }
+  } finally {
+    loadingMessage.classList.add("hide");
+  }
+}
+
+const debouncedSearch = debounce(searchUser, 600);
+
+searchBtn.addEventListener("click", () => searchUser(usernameInput.value));
+usernameInput.addEventListener("input", (e) => debouncedSearch(e.target.value));
+usernameInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") searchUser(usernameInput.value);
+});
+
+sortSelect.addEventListener("change", () => {
+  currentPage = 1;
+  renderRepoList();
+});
+
+loadMoreBtn.addEventListener("click", () => {
+  currentPage++;
+  renderRepoList();
+});
