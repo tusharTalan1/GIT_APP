@@ -108,3 +108,72 @@ async function fetchRepoDetails(owner, repoName) {
   saveToCache(cacheKey, data);
   return data;
 }
+
+function showError(msg) {
+  errorMessage.textContent = msg;
+  errorMessage.classList.remove("hide");
+}
+
+function hideError() {
+  errorMessage.classList.add("hide");
+}
+
+function renderProfile(user) {
+  profileAvatar.src = user.avatar_url;
+  profileName.textContent = user.name || user.login;
+  profileUsername.textContent = `@${user.login}`;
+  profileBio.textContent = user.bio || "";
+  profileFollowers.textContent = user.followers;
+  profileFollowing.textContent = user.following;
+  profileRepos.textContent = user.public_repos;
+  profileLocation.textContent = user.location ? `📍 ${user.location}` : "";
+  profileCard.classList.remove("hide");
+}
+
+function sortRepos(repos, sortBy) {
+  const copy = [...repos];
+  if (sortBy === "stars") {
+    copy.sort((a, b) => b.stargazers_count - a.stargazers_count);
+  } else {
+    copy.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
+  }
+  return copy;
+}
+
+const REPOS_PER_PAGE = 10;
+
+function renderRepoList() {
+  const sorted = sortRepos(allRepos, sortSelect.value);
+  const visible = sorted.slice(0, currentPage * REPOS_PER_PAGE);
+
+  repoList.innerHTML = "";
+  visible.forEach(repo => {
+    const card = document.createElement("div");
+    card.classList.add("repo-card");
+
+    const title = document.createElement("h3");
+    title.textContent = repo.name;
+
+    const desc = document.createElement("p");
+    desc.textContent = repo.description || "No description";
+
+    const meta = document.createElement("div");
+    meta.classList.add("repo-meta");
+    meta.innerHTML = `
+      <span>⭐ ${repo.stargazers_count}</span>
+      <span>${repo.language || "—"}</span>
+      <span>Updated ${new Date(repo.updated_at).toLocaleDateString()}</span>
+    `;
+
+    card.appendChild(title);
+    card.appendChild(desc);
+    card.appendChild(meta);
+
+    card.addEventListener("click", () => openRepoModal(repo));
+
+    repoList.appendChild(card);
+  });
+
+  loadMoreBtn.classList.toggle("hide", visible.length >= sorted.length);
+  repoControls.classList.remove("hide");
+}
