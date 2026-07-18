@@ -31,7 +31,7 @@ A vanilla JavaScript app to search any GitHub user and explore their profile and
 Clone the repo and open `index.html` in a browser (or use a tool like VS Code's Live Server extension):
 
 ```bash
-git clone https://github.com/TarunTalan/<your-repo-name>.git
+git clone https://github.com/tusharTalan1/GIT_APP.git
 cd <your-repo-name>
 ```
 
