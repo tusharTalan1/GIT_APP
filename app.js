@@ -1,4 +1,3 @@
-
 const usernameInput = document.getElementById("username-input");
 const searchBtn = document.getElementById("search-btn");
 const errorMessage = document.getElementById("error-message");
@@ -26,7 +25,6 @@ const modalRepoDescription = document.getElementById("modal-repo-description");
 const modalLanguages = document.getElementById("modal-languages");
 const modalOpenIssues = document.getElementById("modal-open-issues");
 const modalLicense = document.getElementById("modal-license");
-
 
 let allRepos = [];
 let currentPage = 1;
